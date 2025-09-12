@@ -9,4 +9,4 @@ function drawLine(x1,y1,x2,y2,color,width){
   draw.stroke();
 }
 drawLine(0,0,700,500,"Red",3);
-drawLine(500,0,0,700,"Green",3);
+drawLine(0,500,700,0,"Green",3);
