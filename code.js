@@ -10,3 +10,9 @@ function drawLine(x1,y1,x2,y2,color,width){
 }
 drawLine(0,0,700,500,"red",3);
 drawLine(0,500,700,0,"green",3);
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'w') { 
+        event.preventDefault();
+        drawLine(350,0,350,500,"Blue",3);
+        
+    }
