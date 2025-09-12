@@ -8,5 +8,5 @@ function drawLine(x1,y1,x2,y2,color,width){
   draw.lineTo(x2,y2);
   draw.stroke();
 }
-drawLine(0,0,700,500,"Red",3);
-drawLine(0,500,700,0,"Green",3);
+drawLine(0,0,700,500,"red",3);
+drawLine(0,500,700,0,"green",3);
