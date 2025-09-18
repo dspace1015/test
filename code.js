@@ -6,7 +6,7 @@ if(!gl){
   alert("Error, your browser does not support webgl. Try downloading the newest version of your browser or if this worked before try again later");
 }
 var vertices = [
-                -0.5,0.5,0.0,
+                0.0,0.5,0.0,
                 -0.5,-0.5,0.0,
                 0.5,-0.5,0.0, 
                              ];
