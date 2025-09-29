@@ -5,11 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3D with webgl</title>
   <style>
-	  body {background-color:#64B5F6;}
+	  body {background-color:#64B5F6; margin: 0;}
 	</style>
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@v0.180.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.180.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
 <canvas id="Main_Canvas" width=700 height=500>
-<script src="code.js"></script>
+<script type="module" src="code.js"></script>
 </body>
 </html>
