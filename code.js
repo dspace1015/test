@@ -4,13 +4,6 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 //create the scene
 const scene = new THREE.Scene();
-//Setup object loader
-const loader = new GLTFLoader();
-loader.load( 'path/to/model.glb', function ( gltf ) {
-  scene.add( gltf.scene );
-}, undefined, function ( error ) {
-  console.error( error );
-} );
 //Define the camera
 const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 //Define renderer and properties
