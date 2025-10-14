@@ -22,7 +22,7 @@ function terrain(u,v,target){
   let z = (h+1)*math.sin(u);
   target.set( x, y, z );
 }
-const geometry = new THREE.ParametricGeometry(terrain, 50, 50);
+const geometry = new ParametricGeometry(terrain, 50, 50);
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 const cube = new THREE.Mesh( geometry, material );
 scene.add( cube );
