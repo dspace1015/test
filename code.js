@@ -12,20 +12,27 @@ const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.inner
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
-//Test making new geometry
+//defining texuter loader
+const loader = new THREE.TextureLoader();
+//Loading textures:
+const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
+//Test making new geometry, defining surface function
 function terrain(u,v,target){
   u*= Math.PI;
   v*= 2*Math.PI;
-  let h = 0.1*Math.sin(10*u);
-  let x = (h+1)*Math.cos(v)*Math.cos(u);
-  let y = (h+1)*Math.sin(v)*Math.cos(u);
-  let z = (h+1)*Math.sin(u);
+  let x = Math.cos(v)*Math.sin(u);
+  let y = Math.sin(v)*Math.sin(u);
+  let z = Math.cos(u);
+  h = 0.05*sin(Math.PI*x*3)+0.05*cos(Math.PI*y*10)+0.05*cos(Math.PI*z*15+2);
+  x = (1+h)*x;
+  y = (1+h)*y;
+  z = (1+h)*z;
   target.set( x, y, z );
 }
 const geometry = new ParametricGeometry(terrain, 50, 50);
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
+const material = new THREE.MeshBasicMaterial({map: Earth_tex});
+const Earth = new THREE.Mesh( geometry, material );
+scene.add( Earth );
 camera.position.z = 3;
 
 //Main loop for project
