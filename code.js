@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+//Import addon for parametric surfaces
+import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 
 //Import Three js object loader 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
