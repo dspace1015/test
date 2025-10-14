@@ -14,12 +14,12 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 //Test making new geometry
 function terrain(u,v,target){
-  u*= math.PI;
-  v*= 2*math.PI;
-  let h = 0.1*math.sin(10*u);
-  let x = (h+1)*math.cos(v)*math.cos(u);
-  let y = (h+1)*math.sin(v)*math.cos(u);
-  let z = (h+1)*math.sin(u);
+  u*= Math.PI;
+  v*= 2*Math.PI;
+  let h = 0.1*Math.sin(10*u);
+  let x = (h+1)*Math.cos(v)*Math.cos(u);
+  let y = (h+1)*Math.sin(v)*Math.cos(u);
+  let z = (h+1)*Math.sin(u);
   target.set( x, y, z );
 }
 const geometry = new ParametricGeometry(terrain, 50, 50);
