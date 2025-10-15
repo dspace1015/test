@@ -20,9 +20,9 @@ const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
 function terrain(u,v,target){
   u*= 2*Math.PI;
   v*= Math.PI;
-  let x = -Math.cos(u)*Math.sin(v);
-  let y = -Math.sin(u)*Math.sin(v);
-  let z = -Math.cos(v);
+  let x = Math.cos(u)*Math.sin(v);
+  let y = Math.sin(u)*Math.sin(v);
+  let z = Math.cos(v);
   let h = 0.05*Math.sin(Math.PI*x*3)+0.05*Math.cos(Math.PI*y*10)+0.05*Math.cos(Math.PI*z*15+2);
   x = (1+h)*x;
   y = (1+h)*y;
