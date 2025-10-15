@@ -19,7 +19,7 @@ const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
 //Test making new geometry, defining surface function
 function terrain(u,v,target){
   u*= 2*Math.PI;
-  v*= Math.PI;
+  v*= -Math.PI;
   let x = Math.cos(u)*Math.sin(v);
   let y = Math.sin(u)*Math.sin(v);
   let z = Math.cos(v);
