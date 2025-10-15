@@ -28,7 +28,7 @@ function terrain(u,v,target){
   let z = -Math.sin(u)*Math.sin(v);
   let y = Math.cos(v);
   //Height function defined in terms of x,y,z
-  let h = 0.05*Math.sin(Math.PI*x*3)+0.05*Math.cos(Math.PI*z*10)+0.05*Math.cos(Math.PI*y*15+2);
+  let h = 0.01*Math.sin(Math.PI*x*3)+0.01*Math.cos(Math.PI*z*10)+0.01*Math.cos(Math.PI*y*15+2);
   //Scaling by height
   x = (1+h)*x;
   y = (1+h)*y;
