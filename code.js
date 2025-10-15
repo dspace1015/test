@@ -23,7 +23,7 @@ function terrain(u,v,target){
   let x = Math.cos(v)*Math.sin(u);
   let y = Math.sin(v)*Math.sin(u);
   let z = Math.cos(u);
-  h = 0.05*Math.sin(Math.PI*x*3)+0.05*Math.cos(Math.PI*y*10)+0.05*Math.cos(Math.PI*z*15+2);
+  let h = 0.05*Math.sin(Math.PI*x*3)+0.05*Math.cos(Math.PI*y*10)+0.05*Math.cos(Math.PI*z*15+2);
   x = (1+h)*x;
   y = (1+h)*y;
   z = (1+h)*z;
