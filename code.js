@@ -18,11 +18,11 @@ const loader = new THREE.TextureLoader();
 const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
 //Test making new geometry, defining surface function
 function terrain(u,v,target){
-  u*= Math.PI;
-  v*= 2*Math.PI;
-  let x = Math.cos(v)*Math.sin(u);
-  let y = Math.sin(v)*Math.sin(u);
-  let z = Math.cos(u);
+  u*= 2*Math.PI;
+  v*= Math.PI;
+  let x = Math.cos(u)*Math.sin(v);
+  let y = Math.sin(u)*Math.sin(v);
+  let z = Math.cos(v);
   let h = 0.05*Math.sin(Math.PI*x*3)+0.05*Math.cos(Math.PI*y*10)+0.05*Math.cos(Math.PI*z*15+2);
   x = (1+h)*x;
   y = (1+h)*y;
