@@ -29,7 +29,7 @@ function terrain(u,v,target){
   z = (1+h)*z;
   target.set( x, y, z );
 }
-const geometry = new ParametricGeometry(terrain, 50, 50);
+const geometry = new ParametricGeometry(terrain, 500, 500);
 const material = new THREE.MeshBasicMaterial({map: Earth_tex},{side:THREE.BackSide});
 const Earth = new THREE.Mesh( geometry, material );
 scene.add( Earth );
