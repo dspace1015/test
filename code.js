@@ -41,7 +41,7 @@ function main() {
   renderer.render( scene, camera );
 }
 function Update(){
-  cube.rotation.x += 0.6/60;
-  cube.rotation.y += 0.6/60;
+  Earth.rotation.x += 0.6/60;
+  Earth.rotation.y += 0.6/60;
 }
 renderer.setAnimationLoop( main );
