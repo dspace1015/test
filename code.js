@@ -45,12 +45,14 @@ scene.add( Earth );
 camera.position.z = 3;
 
 //Setup time keeping
-let Time = new Date().getTime()/1000;
+let OldTime = new Date().getTime()/1000;
+let Time = OldTime;
 let dt = 0;
 //Main loop for project
 function main() {
-  dt = Time - Date().getTime()/1000;
-  Time = Date().getTime()/1000
+  Time = new Date().getTime()/1000;
+  dt = Time - OldTime;
+  OldTime = Time;
   Update();
   renderer.render( scene, camera );
 }
