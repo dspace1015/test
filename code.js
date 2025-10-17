@@ -43,6 +43,15 @@ scene.add( Earth );
 
 //Set camera position
 camera.position.z = 3;
+//set up key press listeners
+var pressedKeys = {};
+var mouse = {x:0,y:0,d:false};
+var mouseOld = mouse;
+window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
+window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; }
+window.onmousemove = function(e) { mouse.x = e.clientX; mouse.y = e.clientY; }
+window.onmouseup = function(e){ mouse.d = false;}
+window.onmousedown = function(e){ mouse.d = true;}
 
 //Setup time keeping
 let OldTime = new Date().getTime()/1000;
@@ -54,10 +63,15 @@ function main() {
   dt = Time - OldTime;
   OldTime = Time;
   Update();
+  mouseOld = mouse;
   renderer.render( scene, camera );
 }
 function Update(){
-  Earth.rotation.x += 0.06*dt;
-  Earth.rotation.y += 0.6*dt;
+  if(mouseOld.d){
+    Earth.rotation.x += (mouse.y - mouseOld.y)*0.06;
+    Earth.rotation.y += (mouse.x - mouseOld.x)*0.06;
+  }
+  //Earth.rotation.x += 0.06*dt;
+  //Earth.rotation.y += 0.6*dt;
 }
 renderer.setAnimationLoop( main );
