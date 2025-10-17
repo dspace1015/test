@@ -67,7 +67,7 @@ function main() {
   renderer.render( scene, camera );
 }
 function Update(){
-  if(mouseOld.d){
+  if(true){
     Earth.rotation.x += (mouse.y - mouseOld.y)*0.06;
     Earth.rotation.y += (mouse.x - mouseOld.x)*0.06;
   }
