@@ -44,13 +44,18 @@ scene.add( Earth );
 //Set camera position
 camera.position.z = 3;
 
+//Setup time keeping
+let Time = new Date().getTime()/1000;
+let dt = 0;
 //Main loop for project
 function main() {
+  dt = Time - Date().getTime()/1000;
+  Time = Date().getTime()/1000
   Update();
   renderer.render( scene, camera );
 }
 function Update(){
-  //Earth.rotation.x += 0.6/60;
-  Earth.rotation.y += 0.6/60;
+  Earth.rotation.x += 0.06*dt;
+  Earth.rotation.y += 0.6*dt;
 }
 renderer.setAnimationLoop( main );
