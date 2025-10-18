@@ -12,6 +12,11 @@ let near = 0.1;
 let far = 1000;
 let aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
+let camPitch = 0;
+let camYaw = 0;
+let camM = new THREE.Matrix4();
+let camM2= new THREE.Matrix4();
+
 //Define renderer and properties
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -23,12 +28,26 @@ const loader = new THREE.TextureLoader();
 const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
 //Defining critical functions:
 function RotateM(M,axis,ang){
+  let c = Math.cos(ang); let s = Math.sin(ang);
   if(axis=="x"){
-    return [M[0],M[1]*Math.cos(ang)-M[2]*Math.sin(ang),M[2]*Math.cos(ang)+M[1]*Math.sin(ang),M[3],
-            M[4],M[5]*Math.cos(ang)-M[6]*Math.sin(ang),M[6]*Math.cos(ang)+M[5]*Math.sin(ang),M[7],
-            M[8],M[9]*Math.cos(ang)-M[10]*Math.sin(ang),M[10]*Math.cos(ang)+M[9]*Math.sin(ang),M[11],
+    return [M[0],M[1]*c-M[2]*s,M[2]*c+M[1]*s,M[3],
+            M[4],M[5]*c-M[6]*s,M[6]*c+M[5]*s,M[7],
+            M[8],M[9]*c-M[10]*s,M[10]*c+M[9]*s,M[11],
+            M[12],M[13],M[14],M[15]];
+  }else if(axis=="y"){
+    return [M[0]*c+M[2]*s,M[1],M[2]*c-M[0]*s,M[3],
+            M[4]*c+M[6]*s,M[5],M[6]*c-M[4]*s,M[7],
+            M[8]*c+M[10]*s,M[9],M[10]*c-M[8]*s,M[11],
+            M[12],M[13],M[14],M[15]];
+  }else{
+    return [M[0]*c-M[1]*s,M[1]*c+M[0]*s,M[2],M[3],
+            M[4]*c-M[5]*s,M[5]*c+M[4]*s,M[6],M[7],
+            M[8]*c-M[9]*s,M[9]*c+M[8]*s,M[10],M[11],
             M[12],M[13],M[14],M[15]];
   }
+}
+function setCamMatrix(M){
+  camera.matrixWorld.set(M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14],M[15]);
 }
 //Defining the terrain function
 function terrain(u,v,target){
@@ -36,8 +55,8 @@ function terrain(u,v,target){
   v = 1-v;
   v*= Math.PI;
   //Calculates position of vertex off of u,v
-  let x = Math.cos(u)*Math.sin(v);
-  let z = -Math.sin(u)*Math.sin(v);
+  let x = -Math.cos(u)*Math.sin(v);
+  let z = Math.sin(u)*Math.sin(v);
   let y = Math.cos(v);
   //Height function defined in terms of x,y,z
   let h = 0.01*Math.sin(Math.PI*x*3)+0.01*Math.cos(Math.PI*z*10)+0.01*Math.cos(Math.PI*y*15+2);
@@ -74,18 +93,39 @@ function main() {
   Time = new Date().getTime()/1000;
   dt = Time - OldTime;
   OldTime = Time;
-  Update();
+  UpdatePhysics();
+  UpdateScene();
   renderer.render( scene, camera );
 }
-function Update(){
+function UpdatePhysics(){
+  //Nothing much to see yet...
+  Earth.rotation.y += 0.1*dt;
+}
+function UpdateScene(){
+  //Resize the window so that the scene is always centered:
   renderer.setSize( window.innerWidth, window.innerHeight );
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+
   if(mouse.d){
-    camera.rotation.x += Math.PI*(mouse.y - mouseOld.y)/window.innerHeight;
-    camera.rotation.y += Math.PI*(mouse.x - mouseOld.x)/window.innerHeight;
+    //Changes the camera angle if the mouse is pressed.
+    camPitch += -Math.PI*(mouse.y - mouseOld.y)/window.innerHeight;
+    camYaw += -Math.PI*(mouse.x - mouseOld.x)/window.innerHeight;
   }
-  console.log(camera.matrixWorld);
+  //Sorry to use matricies, but its the only way I know of that lets us have no up in space, so this is just preparing for that.
+  //I know quaternions could work too, but matricies give you more power for orientation in my opinion.
+  //Initialises camM matrix with no rotation
+  camM.identity();
+  //Makes a new rotation matrix and applies the rotation to camM
+  camM2.makeRotationY(camYaw);
+  camM.multiply(camM2);
+  //One more rotation
+  camM2.makeRotationX(camPitch);
+  camM.multiply(camM2);
+  //set the camera rotation to the matrix camM and its position accordingly
+  camera.rotation.setFromRotationMatrix(camM);
+  camera.position.set(3*camM.elements[8],3*camM.elements[9],3*camM.elements[10]);
+  //Updates the old mouse position so they are ready for the next frame.
   mouseOld.x = mouse.x;
   mouseOld.y = mouse.y;
   mouseOld.d = mouse.d;
