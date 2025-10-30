@@ -10,7 +10,7 @@ let R_Earth = 6378009;
 //Define the camera
 let fov = 60;
 let near = 0.1;
-let far = 1e10;
+let far = 1e15;
 let aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 let camPitch = 0;
@@ -28,28 +28,37 @@ const loader = new THREE.TextureLoader();
 
 //Loading textures:
 const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
+//Defining critical variables:
+let Planets = [];
+let Ships = [];
+
 //Defining critical functions:
-function RotateM(M,axis,ang){
-  let c = Math.cos(ang); let s = Math.sin(ang);
-  if(axis=="x"){
-    return [M[0],M[1]*c-M[2]*s,M[2]*c+M[1]*s,M[3],
-            M[4],M[5]*c-M[6]*s,M[6]*c+M[5]*s,M[7],
-            M[8],M[9]*c-M[10]*s,M[10]*c+M[9]*s,M[11],
-            M[12],M[13],M[14],M[15]];
-  }else if(axis=="y"){
-    return [M[0]*c+M[2]*s,M[1],M[2]*c-M[0]*s,M[3],
-            M[4]*c+M[6]*s,M[5],M[6]*c-M[4]*s,M[7],
-            M[8]*c+M[10]*s,M[9],M[10]*c-M[8]*s,M[11],
-            M[12],M[13],M[14],M[15]];
-  }else{
-    return [M[0]*c-M[1]*s,M[1]*c+M[0]*s,M[2],M[3],
-            M[4]*c-M[5]*s,M[5]*c+M[4]*s,M[6],M[7],
-            M[8]*c-M[9]*s,M[9]*c+M[8]*s,M[10],M[11],
-            M[12],M[13],M[14],M[15]];
-  }
+function AddPlanet(mass,radius,rotVel){
+  //M is mass
+  Planets += {M:mass,R:radius,rotV:rotVel};
 }
-function setCamMatrix(M){
-  camera.matrixWorld.set(M[0],M[1],M[2],M[3],M[4],M[5],M[6],M[7],M[8],M[9],M[10],M[11],M[12],M[13],M[14],M[15]);
+function OrbitToPosition(a,e,i,node,arg,v){
+  let x = a*(1-e**2)/(1+e*cos(v));
+  let z = -x*sin(v);
+  x = x*cos(v);
+  let y = 0;
+  x,y,z = x*cos(arg)+z*sin(arg),y,z*cos(arg)-x*sin(arg);
+  x,y,z = x,y*cos(i)+z*sin(i),z*cos(i)-y*sin(i);
+  x,y,z = x*cos(node)+z*sin(node),y,z*cos(node)-x*sin(node);
+  return {x:x,y:y,z:z};
+}
+function OrbitToVelocity(GM,a,e,i,node,arg,v){
+  let x = a*(1-e**2);
+  let z = -Math.sqrt(M*x)*(1+e*Math.cos(v))/x;
+  x = E*Math.sqrt(M(1-(Math.cos(v))**2)/x);
+  if(v%(2*Math.PI)>Math.PI){
+    x = -x;
+  }
+  let y = 0;
+  x,y,z = x*cos(arg)+z*sin(arg),y,z*cos(arg)-x*sin(arg);
+  x,y,z = x,y*cos(i)+z*sin(i),z*cos(i)-y*sin(i);
+  x,y,z = x*cos(node)+z*sin(node),y,z*cos(node)-x*sin(node);
+  return {x:x,y:y,z:z};
 }
 //Defining the terrain function
 function terrain(u,v,target){
@@ -62,7 +71,7 @@ function terrain(u,v,target){
   let y = Math.cos(v);
   //Height function defined in terms of x,y,z
   let h = 0.01*Math.sin(Math.PI*x*3)+0.01*Math.cos(Math.PI*z*10)+0.01*Math.cos(Math.PI*y*15+2);
-  h *= 1000000;
+  h *= 10000000;
   //Scaling by height
   x = (R_Earth+h)*x;
   y = (R_Earth+h)*y;
