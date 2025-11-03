@@ -112,7 +112,7 @@ function main() {
 }
 function UpdatePhysics(){
   //Nothing much to see yet...
-  Earth.rotation.y += 0.1*dt;
+  //Earth.rotation.y += 0.1*dt;
 }
 function UpdateScene(){
   //Resize the window so that the scene is always centered:
