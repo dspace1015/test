@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 //create the scene
 const scene = new THREE.Scene();
+// Load the SR-71
 {
   const objLoader = new OBJLoader();
   objLoader.load('models/SR-71.obj', (root) => {
