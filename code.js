@@ -3,9 +3,15 @@ import * as THREE from 'three';
 import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js';
 //Import Three js object loader 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 //create the scene
 const scene = new THREE.Scene();
+{
+  const objLoader = new OBJLoader();
+  objLoader.load('models/SR-71.obj', (root) => {
+    scene.add(root);
+  });
+}
 let R_Earth = 6378009;
 //Define the camera
 let fov = 60;
@@ -15,7 +21,7 @@ let aspect = window.innerWidth / window.innerHeight;
 const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 let camPitch = 0;
 let camYaw = 0;
-let camD = 3*R_Earth;
+let camD = 3;
 let camM = new THREE.Matrix4();
 let camM2= new THREE.Matrix4();
 
@@ -24,10 +30,18 @@ const renderer = new THREE.WebGLRenderer({logarithmicDepthBuffer: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 //defining texuter loader
-const loader = new THREE.TextureLoader();
-
+const Texloader = new THREE.TextureLoader();
+{
+  const skytexture = Texloader.load(
+    'models/2k_stars_milky_way.jpg',
+    () => {
+      skytexture.mapping = THREE.EquirectangularReflectionMapping;
+      skytexture.colorSpace = THREE.SRGBColorSpace;
+      scene.background = skytexture;
+    });
+}
 //Loading textures:
-const Earth_tex = loader.load("models/2k_earth_daymap.jpg");
+const Earth_tex = Texloader.load("models/2k_earth_daymap.jpg");
 //Defining critical variables:
 let Planets = [];
 let Ships = [];
