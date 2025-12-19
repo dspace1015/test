@@ -8,10 +8,16 @@ import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
 const scene = new THREE.Scene();
 // Load the SR-71
 {
+ const mtlLoader = new MTLLoader();
+ mtlLoader.load('models/SR-71.mtl', (materials) => {
+  materials.preload();
+
   const objLoader = new OBJLoader();
+  objLoader.setMaterials(materials);
   objLoader.load('models/SR-71.obj', (root) => {
     scene.add(root);
   });
+});
 }
 let R_Earth = 6378009;
 //Define the camera
