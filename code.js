@@ -4,6 +4,7 @@ import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.j
 //Import Three js object loader 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 //create the scene
 const scene = new THREE.Scene();
 // Load the SR-71
