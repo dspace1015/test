@@ -4,17 +4,19 @@ import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.j
 //Import Three js object loader 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import {OBJLoader} from 'three/addons/loaders/OBJLoader.js';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 //create the scene
 const scene = new THREE.Scene();
 // Load the SR-71
 {
  const mtlLoader = new MTLLoader();
- mtlLoader.load('models/SR-71.mtl', (materials) => {
-  materials.preload();
-
+ mtlLoader.load('models/SR-71.mtl', (mtl) => {
+  mtl.preload();
+  for (const material of Object.values(mtl.materials)) {
+     material.side = THREE.DoubleSide;
+   }
   const objLoader = new OBJLoader();
-  objLoader.setMaterials(materials);
+  objLoader.setMaterials(mtl);
   objLoader.load('models/SR-71.obj', (root) => {
     scene.add(root);
   });
@@ -30,6 +32,7 @@ const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 let camPitch = 0;
 let camYaw = 0;
 let camD = 3;
+let camP = new THREE.Vector3(0,0,0);
 let camM = new THREE.Matrix4();
 let camM2= new THREE.Matrix4();
 
@@ -93,7 +96,7 @@ function terrain(u,v,target){
   let y = Math.cos(v);
   //Height function defined in terms of x,y,z
   let h = 0.01*Math.sin(Math.PI*x*3)+0.01*Math.cos(Math.PI*z*10)+0.01*Math.cos(Math.PI*y*15+2);
-  h *= 100000000;
+  h *= 1;
   //Scaling by height
   x = (R_Earth+h)*x;
   y = (R_Earth+h)*y;
@@ -139,9 +142,9 @@ function UpdatePhysics(){
 function UpdateScene(){
   //Resize the window so that the scene is always centered:
   renderer.setSize( window.innerWidth, window.innerHeight );
+
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-
   if(mouse.d){
     //Changes the camera angle if the mouse is pressed.
     camPitch += -Math.PI*(mouse.y - mouseOld.y)/window.innerHeight;
@@ -159,10 +162,13 @@ function UpdateScene(){
   camM.multiply(camM2);
   //set the camera rotation to the matrix camM and its position accordingly
   camera.rotation.setFromRotationMatrix(camM);
-  camera.position.set(camD*camM.elements[8],camD*camM.elements[9],camD*camM.elements[10]);
+  camP.set(camD*camM.elements[8],camD*camM.elements[9],camD*camM.elements[10]);
+  camera.position.set(0,0,0);
   //Updates the old mouse position so they are ready for the next frame.
   mouseOld.x = mouse.x;
   mouseOld.y = mouse.y;
   mouseOld.d = mouse.d;
+
+  Earth.position.set(-camP.x,-camP.y,-camP.z);
 }
 renderer.setAnimationLoop( main );
